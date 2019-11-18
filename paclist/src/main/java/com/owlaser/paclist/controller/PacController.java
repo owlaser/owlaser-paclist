@@ -5,11 +5,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-public class controller {
+public class PacController {
 
     @ResponseBody
     @GetMapping(value = "/paclist")
     public static String show(){
-
+        return "HelloWorld";
     }
 }
