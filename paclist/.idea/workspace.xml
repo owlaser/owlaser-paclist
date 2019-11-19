@@ -2,10 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="60483ab9-ab9f-435f-a4ad-e7dbfb11b74d" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/owlaser/paclist/dao/PacDao.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__dom4j_dom4j_1_6_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__xml_apis_xml_apis_1_0_b2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/owlaser/paclist/controller/GlobalExceptionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/upload.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/uploadStatus.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/owlaser/paclist/controller/controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/owlaser/paclist/controller/controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/owlaser/paclist/controller/controller.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/owlaser/paclist/controller/controller.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paclist.iml" beforeDir="false" afterPath="$PROJECT_DIR$/paclist.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/owlaser/paclist/controller/PacController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/owlaser/paclist/controller/PacController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/owlaser/paclist/controller/PacController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/owlaser/paclist/controller/PacController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/index.html" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,6 +31,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -37,10 +49,12 @@
   <component name="ProjectId" id="1TmwBBcnu0Cz2wbRTEV3kyhaqoM" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RequestMappingsPanelOrder0" value="0" />
     <property name="RequestMappingsPanelOrder1" value="1" />
     <property name="RequestMappingsPanelWidth0" value="75" />
     <property name="RequestMappingsPanelWidth1" value="75" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -49,6 +63,13 @@
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="settings.editor.selected.configurable" value="MavenSettings" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources/static" />
+      <recent name="$PROJECT_DIR$/src/main/resources/static/css" />
+      <recent name="$PROJECT_DIR$/src/main/resources" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -84,6 +105,7 @@
       <workItem from="1574078457740" duration="970000" />
       <workItem from="1574079576127" duration="212000" />
       <workItem from="1574079961254" duration="1103000" />
+      <workItem from="1574126339332" duration="9524000" />
     </task>
     <servers />
   </component>
