@@ -9,9 +9,6 @@
         <module name="paclist" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="12">
-      <module name="paclist" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">

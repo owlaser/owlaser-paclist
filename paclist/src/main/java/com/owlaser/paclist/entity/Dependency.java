@@ -4,6 +4,8 @@ public class Dependency {
     private String artifactId;
     private String version;
     private String groupId;
+    private String popurlarVersion;
+    private String latestStableVersion;
 
     public Dependency(String groupId,String artifactId, String version) {
         this.groupId = groupId;
@@ -15,6 +17,8 @@ public class Dependency {
         artifactId = null;
         version = null;
         groupId = null;
+        popurlarVersion = null;
+        latestStableVersion = null;
     }
 
     public String getArtifactId() {
@@ -29,6 +33,14 @@ public class Dependency {
         return groupId;
     }
 
+    public String getPopurlarVersion() {
+        return popurlarVersion;
+    }
+
+    public String getLatestStableVersion() {
+        return latestStableVersion;
+    }
+
     public void setArtifactId(String artifactId) {
         this.artifactId = artifactId;
     }
@@ -39,6 +51,14 @@ public class Dependency {
 
     public void setGroupId(String groupId) {
         this.groupId = groupId;
+    }
+
+    public void setPopurlarVersion(String popurlarVersion) {
+        this.popurlarVersion = popurlarVersion;
+    }
+
+    public void setLatestStableVersion(String latestStableVersion) {
+        this.latestStableVersion = latestStableVersion;
     }
 
 }

@@ -31,12 +31,16 @@
                 <td>groupid</td>
                 <td>artifactid</td>
                 <td>当前版本</td>
+                <td>热度最高版本</td>
+                <td>最新稳定版本</td>
             </tr>
             <tr th:each="dependency : ${dependenciesList}">
                 <td th:text="${dependency.artifactId}"></td>
                 <td th:text="${dependency.groupId}"></td>
                 <td th:text="${dependency.artifactId}"></td>
                 <td th:text="${dependency.version}"></td>
+                <td th:text="${dependency.popurlarVersion}"></td>
+                <td th:text="${dependency.latestStableVersion}"></td>
             </tr>
         </table>
     </div>
