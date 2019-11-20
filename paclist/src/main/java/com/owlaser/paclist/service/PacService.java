@@ -4,9 +4,14 @@ import com.owlaser.paclist.entity.Dependency;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.jsoup.Jsoup;
+import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -49,12 +54,74 @@ public class PacService {
                 else if(value.getName().equals("groupId")){
                     dependency.setGroupId(value.getStringValue());
                 }
-
             }
             if(dependency.getArtifactId() != null && dependency.getVersion() != null){
+                System.out.println(dependency.getGroupId());
+                String url = "https://mvnrepository.com/artifact/" + dependency.getGroupId() + "/" + dependency.getArtifactId();
+                String stableLatestVersionName = getStableLatestVersionName(url, dependency);
+                dependency.setLatestStableVersion(stableLatestVersionName);
+                ArrayList<String> VersionName = getAllVersionName(url);
+                ArrayList<Integer> usages = getAllUsages(url);
+                //System.out.println(usages.indexOf(Collections.max(usages)));
+                //System.out.println(Collections.max(usages));
+                String bestVersion = VersionName.get(usages.indexOf(Collections.max(usages)));
+                dependency.setPopurlarVersion(bestVersion);
                 dependenciesList.add(dependency);
             }
         }
         return;
+    }
+
+    //得到该组件的最新稳定版本
+    public static String getStableLatestVersionName(String url, Dependency dependency){
+        String res = "";
+        try {
+            org.jsoup.nodes.Document document = Jsoup.connect(url).header("user-agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.80 Safari/537.36").get();
+            Elements value = document.getElementsByTag("td");
+            for(org.jsoup.nodes.Element element : value) {
+                if (element.text().matches("^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}.*$")) {
+                    res = element.text();
+                    String ragex = "[^(a-zA-Z)]";
+                    String stableSign = res.replaceAll(ragex, "");//提取版本号中的字母部分，以查看是否是稳定版本
+                    if (stableSign.equals("Final")|| stableSign.equals("RELEASE") || stableSign.equals("") ) {
+                        return res;
+                    }
+                }
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return "未找到最新稳定版本!";//未找到最新稳定版本
+    }
+
+    public static ArrayList getAllVersionName(String url){
+        ArrayList<String> list = new ArrayList<>();
+        try {
+            org.jsoup.nodes.Document document = Jsoup.connect(url).header("user-agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.80 Safari/537.36").get();
+            Elements value = document.getElementsByTag("td");
+            for(org.jsoup.nodes.Element element : value){
+                if(element.text().matches("^\\d{1,3}\\.\\d{1,3}.*$"))
+                    list.add(element.text());
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public static ArrayList getAllUsages(String url){
+        ArrayList<Integer> list = new ArrayList<>();
+        try {
+            org.jsoup.nodes.Document document = Jsoup.connect(url).header("user-agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.80 Safari/537.36").get();
+            Elements value = document.getElementsByTag("td");
+            for(org.jsoup.nodes.Element element : value){
+                if(element.text().matches("^\\d+")){
+                    list.add(Integer.parseInt(element.text()));
+                }
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return list;
     }
 }

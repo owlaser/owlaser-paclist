@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/owlaser.paclist.iml" filepath="$PROJECT_DIR$/.idea/owlaser.paclist.iml" />
+      <module fileurl="file://$PROJECT_DIR$/paclist/.mvn/.mvn.iml" filepath="$PROJECT_DIR$/paclist/.mvn/.mvn.iml" />
+      <module fileurl="file://$PROJECT_DIR$/paclist/src/main/main.iml" filepath="$PROJECT_DIR$/paclist/src/main/main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/paclist/src/test/test.iml" filepath="$PROJECT_DIR$/paclist/src/test/test.iml" />
     </modules>
   </component>
 </project>
