@@ -6,6 +6,7 @@ public class Dependency {
     private String groupId;
     private String popurlarVersion;
     private String latestStableVersion;
+    private ArrayList<String> license;
 
     public Dependency(String groupId,String artifactId, String version) {
         this.groupId = groupId;
@@ -19,6 +20,7 @@ public class Dependency {
         groupId = null;
         popurlarVersion = null;
         latestStableVersion = null;
+        license = null;
     }
 
     public String getArtifactId() {
@@ -61,4 +63,11 @@ public class Dependency {
         this.latestStableVersion = latestStableVersion;
     }
 
+    public ArrayList<String> getLicense() {
+        return license;
+    }
+
+    public void setLicense(ArrayList<String> license) {
+        this.license = license;
+    }
 }
