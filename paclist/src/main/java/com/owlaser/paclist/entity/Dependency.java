@@ -1,5 +1,5 @@
 package com.owlaser.paclist.entity;
-
+import java.util.ArrayList;
 public class Dependency {
     private String artifactId;
     private String version;
