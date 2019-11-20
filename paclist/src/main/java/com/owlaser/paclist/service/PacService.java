@@ -62,11 +62,11 @@ public class PacService {
                 dependency.setLatestStableVersion(stableLatestVersionName);
                 ArrayList<String> VersionName = getAllVersionName(url);
                 ArrayList<Integer> usages = getAllUsages(url);
-                //System.out.println(usages.indexOf(Collections.max(usages)));
-                //System.out.println(Collections.max(usages));
-                String bestVersion = VersionName.get(usages.indexOf(Collections.max(usages)));
-                dependency.setPopurlarVersion(bestVersion);
-                dependenciesList.add(dependency);
+                ArrayList<String> License = getLicense(url);  //获取license
+                     dependency.setLicense(License);
+                    String bestVersion = VersionName.get(usages.indexOf(Collections.max(usages)));
+                    dependency.setPopurlarVersion(bestVersion);
+                    dependenciesList.add(dependency);
             }
         }
         return;
@@ -98,10 +98,11 @@ public class PacService {
         ArrayList<String> list = new ArrayList<>();
         try {
             org.jsoup.nodes.Document document = Jsoup.connect(url).header("user-agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.80 Safari/537.36").get();
-            Elements value = document.getElementsByTag("td");
-            for(org.jsoup.nodes.Element element : value){
-                if(element.text().matches("^\\d{1,3}\\.\\d{1,3}.*$"))
-                    list.add(element.text());
+            Elements value = document.select(".vbtn").select(".release");
+            for(org.jsoup.nodes.Element element:value){
+                org.jsoup.nodes.Document elementdoc = Jsoup.parse(element.toString());
+                Elements license = elementdoc.select("a");
+                list.add(license.text());
             }
         }catch (IOException e){
             e.printStackTrace();
@@ -118,6 +119,26 @@ public class PacService {
                 if(element.text().matches("^\\d+")){
                     list.add(Integer.parseInt(element.text()));
                 }
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return list;
+    }
+    
+    public static ArrayList getLicense(String url){
+        ArrayList<String> list = new ArrayList<>();
+        try {
+            org.jsoup.nodes.Document document = Jsoup.connect(url).header("user-agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.80 Safari/537.36").get();
+//            Elements value = document.getElementsByClass("b lic");
+//            System.out.println(value);
+            Elements value = document.select(".b").select(".lic");
+
+
+            for(org.jsoup.nodes.Element element:value){
+                org.jsoup.nodes.Document elementdoc = Jsoup.parse(element.toString());
+                Elements license = elementdoc.select("span");
+                list.add(license.text());
             }
         }catch (IOException e){
             e.printStackTrace();
