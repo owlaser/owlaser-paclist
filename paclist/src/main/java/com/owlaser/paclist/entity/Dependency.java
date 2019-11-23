@@ -4,6 +4,8 @@ public class Dependency {
     private String artifactId;
     private String version;
     private String groupId;
+    private ArrayList<String> versionList;
+    private ArrayList<Integer> usageList;
     private String popurlarVersion;
     private String latestStableVersion;
     private ArrayList<String> license;
@@ -18,6 +20,8 @@ public class Dependency {
         artifactId = null;
         version = null;
         groupId = null;
+        versionList = null;
+        usageList = null;
         popurlarVersion = null;
         latestStableVersion = null;
         license = null;
@@ -34,6 +38,14 @@ public class Dependency {
     public String getGroupId() {
         return groupId;
     }
+
+    public ArrayList<String> getVersionList() {return versionList;}
+
+    public void setVersionList(ArrayList<String> versionList){this.versionList = versionList;}
+
+    public ArrayList<Integer> getusageList() {return usageList;}
+
+    public void setusageList(ArrayList<Integer> usageList){this.usageList = usageList;}
 
     public String getPopurlarVersion() {
         return popurlarVersion;

@@ -36,6 +36,8 @@ public class PacService {
         }
     }
 
+
+
     //得到pom文件里的依赖包信息
     public static void GetDependencies(Element parent, List<Dependency> dependenciesList){
         for(Iterator<Element> it = parent.elementIterator("dependency"); it.hasNext();)
@@ -58,91 +60,67 @@ public class PacService {
             if(dependency.getArtifactId() != null && dependency.getVersion() != null){
                 System.out.println(dependency.getGroupId());
                 String url = "https://mvnrepository.com/artifact/" + dependency.getGroupId() + "/" + dependency.getArtifactId();
-                String stableLatestVersionName = getStableLatestVersionName(url, dependency);
-                dependency.setLatestStableVersion(stableLatestVersionName);
-                ArrayList<String> VersionName = getAllVersionName(url);
-                ArrayList<Integer> usages = getAllUsages(url);
-                ArrayList<String> License = getLicense(url);  //获取license
-                     dependency.setLicense(License);
-                    String bestVersion = VersionName.get(usages.indexOf(Collections.max(usages)));
-                    dependency.setPopurlarVersion(bestVersion);
-                    dependenciesList.add(dependency);
+                getAll(url,dependency);
+                dependenciesList.add(dependency);
             }
         }
         return;
     }
 
-    //得到该组件的最新稳定版本
-    public static String getStableLatestVersionName(String url, Dependency dependency){
-        String res = "";
+    public static void getAll(String url, Dependency dependency){
+        String tmp="";
+        ArrayList<String> versionList= new ArrayList<>();
+        ArrayList<Integer> usageList = new ArrayList<>();
+        ArrayList<String> licenseList = new ArrayList<>();
         try {
             org.jsoup.nodes.Document document = Jsoup.connect(url).header("user-agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.80 Safari/537.36").get();
-            Elements value = document.getElementsByTag("td");
-            for(org.jsoup.nodes.Element element : value) {
+            Elements latestversionValue = document.getElementsByTag("td");
+            Elements versionnameValue = document.select(".vbtn");
+            Elements usageValue = document.getElementsByTag("td");
+            Elements licenseValue = document.select(".b").select(".lic");
+            for(org.jsoup.nodes.Element element : latestversionValue) {
                 if (element.text().matches("^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}.*$")) {
-                    res = element.text();
+                    tmp = element.text();
                     String ragex = "[^(a-zA-Z)]";
-                    String stableSign = res.replaceAll(ragex, "");//提取版本号中的字母部分，以查看是否是稳定版本
+                    String stableSign = tmp.replaceAll(ragex, "");////提取版本号中的字母部分，以查看是否是稳定版本
                     if (stableSign.equals("Final")|| stableSign.equals("RELEASE") || stableSign.equals("") ) {
-                        return res;
+                        dependency.setLatestStableVersion(tmp);
+                        break;
                     }
                 }
             }
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-        return "未找到最新稳定版本!";//未找到最新稳定版本
-    }
-
-    public static ArrayList getAllVersionName(String url){
-        ArrayList<String> list = new ArrayList<>();
-        try {
-            org.jsoup.nodes.Document document = Jsoup.connect(url).header("user-agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.80 Safari/537.36").get();
-            Elements value = document.select(".vbtn").select(".release");
-            for(org.jsoup.nodes.Element element:value){
+            for(org.jsoup.nodes.Element element:versionnameValue){
                 org.jsoup.nodes.Document elementdoc = Jsoup.parse(element.toString());
-                Elements license = elementdoc.select("a");
-                list.add(license.text());
-            }
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-        return list;
-    }
+                Elements versionName = elementdoc.select("a");
+                versionList.add(versionName.text());
 
-    public static ArrayList getAllUsages(String url){
-        ArrayList<Integer> list = new ArrayList<>();
-        try {
-            org.jsoup.nodes.Document document = Jsoup.connect(url).header("user-agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.80 Safari/537.36").get();
-            Elements value = document.getElementsByTag("td");
-            for(org.jsoup.nodes.Element element : value){
-                if(element.text().matches("^\\d+")){
-                    list.add(Integer.parseInt(element.text()));
+            }
+            for(org.jsoup.nodes.Element element : usageValue){
+                if(element.text().matches("\\d{1,3}(,\\d{3})*$")){ //取使用量，对于三位分割法去掉中间的逗号
+                    String rawString = element.text();
+                    String removeStr = ",";
+                    rawString = rawString.replace(removeStr,"");
+                    usageList.add(Integer.parseInt(rawString));
                 }
             }
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-        return list;
-    }
-    
-    public static ArrayList getLicense(String url){
-        ArrayList<String> list = new ArrayList<>();
-        try {
-            org.jsoup.nodes.Document document = Jsoup.connect(url).header("user-agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.80 Safari/537.36").get();
-//            Elements value = document.getElementsByClass("b lic");
-//            System.out.println(value);
-            Elements value = document.select(".b").select(".lic");
-
-
-            for(org.jsoup.nodes.Element element:value){
+            for(org.jsoup.nodes.Element element:licenseValue){
                 org.jsoup.nodes.Document elementdoc = Jsoup.parse(element.toString());
                 Elements license = elementdoc.select("span");
-                list.add(license.text());
+                licenseList.add(license.text());
             }
-        }catch (IOException e){
+
+
+        }
+        catch (IOException e){
             e.printStackTrace();
         }
-        return list;
+        // System.out.println(usageList.size() + " " + versionList.size());
+        dependency.setVersionList(versionList);
+        dependency.setusageList(usageList);
+        dependency.setLicense(licenseList);
+        String bestVersion = versionList.get(usageList.indexOf(Collections.max(usageList)));
+        dependency.setPopurlarVersion(bestVersion);
     }
+
+
 }
