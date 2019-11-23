@@ -43,6 +43,7 @@ public class PacController {
             Path path = Paths.get(path1 + file.getOriginalFilename());
             Files.write(path, bytes);
             model.addAttribute("messages", "文件上传成功！开始扫描");
+
             ArrayList<Dependency> dependenciesList = new ArrayList<>();
             pacService.ScanPac(path1 + file.getOriginalFilename(), dependenciesList);
             model.addAttribute("dependenciesList", dependenciesList);
