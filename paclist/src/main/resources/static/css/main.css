@@ -1,5 +1,5 @@
 body{
-    background-color: #d0d0d0;
+    background-color: #f0efec;
 
 }
 
@@ -10,7 +10,7 @@ body{
 }
 
 .output{
-    height: 800px;
+    height: 600px;
     margin: 200px 30px 0px 30px;
     background-color: white;
 }
