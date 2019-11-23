@@ -1,5 +1,11 @@
 # Xcode
 
+.gitignore
+
+.idea
+
+*.xml
+
 .DS_Store
 
 ## Build generated
