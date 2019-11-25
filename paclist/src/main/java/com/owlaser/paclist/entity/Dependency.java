@@ -8,7 +8,7 @@ public class Dependency {
     private ArrayList<Integer> usageList;
     private String popular_version;
     private String stable_version;
-    private ArrayList<String> licenseList;
+   
     private String license;
 
     public Dependency(String group_id, String artifact_id, String version) {
@@ -25,7 +25,7 @@ public class Dependency {
         usageList = null;
         popular_version = null;
         stable_version = null;
-        licenseList = null;
+        license = null;
     }
 
     public String getArtifact_id() {
@@ -84,13 +84,7 @@ public class Dependency {
         this.stable_version = stable_version;
     }
 
-    public ArrayList<String> getLicenseList() {
-        return licenseList;
-    }
-
-    public void setLicenseList(ArrayList<String> licenseList) {
-        this.licenseList = licenseList;
-    }
+   
 
     public String getLicense() {
         return license;
