@@ -140,8 +140,9 @@ public class PacService {
         }
         dependency.setVersionList(versionList);
         dependency.setUsageList(usageList);
-        dependency.setLicenseList(licenseList);
-        dependency.setLicense(licenseList.get(0));
+       String license = String.join("  ",licenseList);
+       // dependency.setLicenseList(licenseList);
+        dependency.setLicense(license);
         String bestVersion = versionList.get(usageList.indexOf(Collections.max(usageList)));
         dependency.setPopular_version(bestVersion);
     }
