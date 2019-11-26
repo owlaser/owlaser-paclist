@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -44,7 +45,8 @@ public class PacController {
             Files.write(path, bytes);
             model.addAttribute("messages", "文件上传成功！开始扫描");
             ArrayList<Dependency> dependenciesList = new ArrayList<>();
-            pacService.ScanPac(path1 + file.getOriginalFilename(), dependenciesList);
+            InputStream input = pacService.JarRead(path1 + file.getOriginalFilename());
+            pacService.ScanPac(input, dependenciesList);
             model.addAttribute("dependenciesList", dependenciesList);
         }
         catch (IOException e){

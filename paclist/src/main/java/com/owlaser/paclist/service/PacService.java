@@ -12,22 +12,23 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.io.InputStream;
+import java.util.*;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class PacService {
     @Autowired
     private PacDao pacDao;
 
-    public void ScanPac(String filepath, List<Dependency> dependenciesList) {
+    public void ScanPac(InputStream input, List<Dependency> dependenciesList) {
         SAXReader reader = new SAXReader();
-        File pom = new File(filepath);
         try {
             // 通过reader对象的read方法加载xml文件 ，获取docuement对象
-            Document document = reader.read(pom);
+            Document document = reader.read(input);
             // 通过document对象获取根节点root
             Element root = document.getRootElement();
             if(root.element("dependencyManagement") != null){
@@ -147,4 +148,21 @@ public class PacService {
         dependency.setPopular_version(bestVersion);
     }
 
+    public static InputStream JarRead(String filepath) throws IOException{
+        JarFile jarFile = new JarFile(filepath);
+        Enumeration enu = jarFile.entries();
+        String pompath = "";
+        while(enu.hasMoreElements()){
+            JarEntry element = (JarEntry) enu.nextElement();
+            String name = element.getName();  //获取Jar包中的条目名字
+            Pattern r = Pattern.compile("(pom.xml)$");
+            Matcher m = r.matcher(name);
+            if(m.find()){
+                pompath = name;
+            }
+        }
+        JarEntry entry = jarFile.getJarEntry(pompath);
+        InputStream input = jarFile.getInputStream(entry); //获取该文件的输入流
+        return input;
+    }
 }
