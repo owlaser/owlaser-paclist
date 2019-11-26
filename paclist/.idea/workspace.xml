@@ -2,27 +2,34 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b9510292-d181-424c-b7ae-191366cda908" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/repository/pom/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/repository/pom/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/owlaser/paclist/PaclistApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/owlaser/paclist/PaclistApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/owlaser/paclist/dao/PacDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/owlaser/paclist/dao/PacDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/owlaser/paclist/entity/Dependency.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/owlaser/paclist/entity/Dependency.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/owlaser/paclist/controller/PacController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/owlaser/paclist/controller/PacController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/owlaser/paclist/service/PacService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/owlaser/paclist/service/PacService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/upload.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/upload.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/owlaser/paclist/controller/PacController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/owlaser/paclist/controller/PacController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/owlaser/paclist/dao/PacDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/owlaser/paclist/dao/PacDao.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/owlaser/paclist/entity/Dependency.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/owlaser/paclist/entity/Dependency.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/owlaser/paclist/service/PacService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/owlaser/paclist/service/PacService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/upload.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/upload.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -50,7 +57,7 @@
     <property name="RequestMappingsPanelWidth1" value="75" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/static" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="MavenSettings" />
   </component>
   <component name="RecentsManager">
@@ -92,6 +99,7 @@
       <workItem from="1574504646117" duration="1716000" />
       <workItem from="1574562573949" duration="3043000" />
       <workItem from="1574668446824" duration="8057000" />
+      <workItem from="1574770935080" duration="379000" />
     </task>
     <servers />
   </component>
