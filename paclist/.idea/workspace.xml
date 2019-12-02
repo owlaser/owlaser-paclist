@@ -5,11 +5,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/owlaser/paclist/controller/PacController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/owlaser/paclist/controller/PacController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/owlaser/paclist/service/PacService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/owlaser/paclist/service/PacService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/owlaser/paclist/controller/PacController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/owlaser/paclist/controller/PacController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/owlaser/paclist/entity/Dependency.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/owlaser/paclist/entity/Dependency.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/owlaser/paclist/service/PacService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/owlaser/paclist/service/PacService.class" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -100,6 +95,7 @@
       <workItem from="1574562573949" duration="3043000" />
       <workItem from="1574668446824" duration="8057000" />
       <workItem from="1574770935080" duration="379000" />
+      <workItem from="1575290730398" duration="31000" />
     </task>
     <servers />
   </component>

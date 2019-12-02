@@ -3,6 +3,7 @@ package com.owlaser.paclist.service;
 import com.owlaser.paclist.dao.PacDao;
 import com.owlaser.paclist.entity.Dependency;
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.jsoup.Jsoup;
@@ -24,25 +25,43 @@ public class PacService {
     @Autowired
     private PacDao pacDao;
 
-    public void ScanPac(InputStream input, List<Dependency> dependenciesList) {
+    public void ScanPacJar(InputStream input, String fileName, List<Dependency> dependenciesList) {
         SAXReader reader = new SAXReader();
         try {
             // 通过reader对象的read方法加载xml文件 ，获取docuement对象
             Document document = reader.read(input);
             // 通过document对象获取根节点root
-            Element root = document.getRootElement();
-            if(root.element("dependencyManagement") != null){
-                Element dependencyManagement = root.element("dependencyManagement").element("dependencies");
-                GetDependencies(dependencyManagement, dependenciesList);
-            }
-            Element dependencies = root.element("dependencies");
-            GetDependencies(dependencies, dependenciesList);
+            ReadPom(document,dependenciesList);
+        } catch (DocumentException e ) { //捕获input为空时抛出的异常
+            SetNoPomDependencies(dependenciesList, fileName);
+        }
+        catch (Exception ex ) { //捕获其他异常
+            ex.printStackTrace();
+        }
+    }
+
+    public void ScanPacPom(String filepath, List<Dependency> dependenciesList) {
+        SAXReader reader = new SAXReader();
+        File pom = new File(filepath);
+        try {
+            // 通过reader对象的read方法加载xml文件 ，获取docuement对象
+            Document document = reader.read(filepath);
+            // 通过document对象获取根节点root
+            ReadPom(document,dependenciesList);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-
+    public void ReadPom(Document document, List<Dependency> dependenciesList) {
+        Element root = document.getRootElement();
+        if (root.element("dependencyManagement") != null) {
+            Element dependencyManagement = root.element("dependencyManagement").element("dependencies");
+            GetDependencies(dependencyManagement, dependenciesList);
+        }
+        Element dependencies = root.element("dependencies");
+        GetDependencies(dependencies, dependenciesList);
+    }
 
     //得到pom文件里的依赖包信息
     public void GetDependencies(Element parent, List<Dependency> dependenciesList){
@@ -141,28 +160,53 @@ public class PacService {
         }
         dependency.setVersionList(versionList);
         dependency.setUsageList(usageList);
-       String license = String.join("  ",licenseList);
-       // dependency.setLicenseList(licenseList);
+        String license = String.join("  ",licenseList);
+        // dependency.setLicenseList(licenseList);
         dependency.setLicense(license);
         String bestVersion = versionList.get(usageList.indexOf(Collections.max(usageList)));
         dependency.setPopular_version(bestVersion);
     }
 
     public static InputStream JarRead(String filepath) throws IOException{
+        InputStream input = new InputStream() { //创造一个input实例，内容不重要
+            @Override
+            public int read() {
+                return -1;  // end of stream
+            }
+        };
         JarFile jarFile = new JarFile(filepath);
         Enumeration enu = jarFile.entries();
-        String pompath = "";
         while(enu.hasMoreElements()){
+            String pompath = "";
             JarEntry element = (JarEntry) enu.nextElement();
             String name = element.getName();  //获取Jar包中的条目名字
             Pattern r = Pattern.compile("(pom.xml)$");
             Matcher m = r.matcher(name);
             if(m.find()){
                 pompath = name;
+                JarEntry entry = jarFile.getJarEntry(pompath);
+                input = jarFile.getInputStream(entry); //获取该文件的输入流
             }
         }
-        JarEntry entry = jarFile.getJarEntry(pompath);
-        InputStream input = jarFile.getInputStream(entry); //获取该文件的输入流
         return input;
     }
+
+    public void SetNoPomDependencies(List<Dependency> dependenciesList, String fileName){
+        Dependency dependency = new Dependency();
+        dependency.setArtifact_id("");
+        dependency.setVersion("");
+        dependency.setGroup_id(fileName+"没有检测到pom.xml文件，请扫描其他Jar包");
+        ArrayList<String> versionList= new ArrayList<>();
+        ArrayList<Integer> usageList = new ArrayList<>();
+        versionList.add("");
+        usageList.add(null);
+        String license = "";
+        dependency.setVersionList(versionList);
+        dependency.setUsageList(usageList);
+        dependency.setPopular_version("");
+        dependency.setStable_version("");
+        dependency.setLicense(license);
+        dependenciesList.add(dependency);
+    }
+
 }
