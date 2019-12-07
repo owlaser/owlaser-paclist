@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 public class PacController {
@@ -45,8 +47,15 @@ public class PacController {
             Files.write(path, bytes);
             model.addAttribute("messages", "文件上传成功！开始扫描");
             ArrayList<Dependency> dependenciesList = new ArrayList<>();
-            InputStream input = pacService.JarRead(path1 + file.getOriginalFilename());
-            pacService.ScanPac(input, dependenciesList);
+            Pattern r = Pattern.compile("(pom.xml)$");
+            Matcher m = r.matcher(file.getOriginalFilename());
+            if(m.find()){
+                pacService.ScanPacPom(path1 + file.getOriginalFilename(),dependenciesList);
+            }
+            else {
+                InputStream input = pacService.JarRead(path1 + file.getOriginalFilename());
+                pacService.ScanPacJar(input, file.getOriginalFilename(), dependenciesList);
+            }
             model.addAttribute("dependenciesList", dependenciesList);
         }
         catch (IOException e){
