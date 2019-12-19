@@ -1,5 +1,7 @@
 package com.owlaser.paclist.entity;
 import java.util.ArrayList;
+
+
 public class Dependency {
     private String artifact_id;
     private String version;
@@ -10,6 +12,7 @@ public class Dependency {
     private String stable_version;
    
     private String license;
+    private ArrayList<String> licenseList;
 
     public Dependency(String group_id, String artifact_id, String version) {
         this.group_id = group_id;
@@ -26,6 +29,7 @@ public class Dependency {
         popular_version = null;
         stable_version = null;
         license = null;
+        licenseList = null;
     }
 
     public String getArtifact_id() {
@@ -92,5 +96,13 @@ public class Dependency {
 
     public void setLicense(String license) {
         this.license = license;
+    }
+
+    public ArrayList<String> getLicenseList() {
+        return licenseList;
+    }
+
+    public void setLicenseList(ArrayList<String> licenseList) {
+        this.licenseList = licenseList;
     }
 }

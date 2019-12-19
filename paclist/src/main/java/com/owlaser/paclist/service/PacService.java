@@ -2,6 +2,8 @@ package com.owlaser.paclist.service;
 
 import com.owlaser.paclist.dao.PacDao;
 import com.owlaser.paclist.entity.Dependency;
+import fr.dutra.tools.maven.deptree.core.Node;
+import org.apache.maven.shared.invoker.*;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -22,66 +25,34 @@ import java.util.regex.Pattern;
 
 @Service
 public class PacService {
-    @Autowired
+    @Autowired(required = false)
     private PacDao pacDao;
 
-    public void ScanPacJar(InputStream input, String fileName, List<Dependency> dependenciesList) {
-        SAXReader reader = new SAXReader();
+    public String CreateDependencyText(String folderPath, Path pomPath) {
+        InvocationRequest request = new DefaultInvocationRequest();
+        request.setPomFile(new File(String.valueOf(pomPath)));
+        String textPath = folderPath + "dependency_tree";
+        request.setGoals(Collections.singletonList("dependency:tree -D outputFile=dependency_tree -D outputType=text"));
+        Invoker invoker = new DefaultInvoker();
+        // 指定本机的MAVEN_HOME地址，参考invoker.setMavenHome(new File(System.getenv("MAVEN_HOME")));
+        invoker.setMavenHome(new File(System.getenv("MAVEN_HOME")));
         try {
-            // 通过reader对象的read方法加载xml文件 ，获取docuement对象
-            Document document = reader.read(input);
-            // 通过document对象获取根节点root
-            ReadPom(document,dependenciesList);
-        } catch (DocumentException e ) { //捕获input为空时抛出的异常
-            SetNoPomDependencies(dependenciesList, fileName);
-        }
-        catch (Exception ex ) { //捕获其他异常
-            ex.printStackTrace();
-        }
-    }
-
-    public void ScanPacPom(String filepath, List<Dependency> dependenciesList) {
-        SAXReader reader = new SAXReader();
-        File pom = new File(filepath);
-        try {
-            // 通过reader对象的read方法加载xml文件 ，获取docuement对象
-            Document document = reader.read(filepath);
-            // 通过document对象获取根节点root
-            ReadPom(document,dependenciesList);
-        } catch (Exception e) {
+            invoker.execute(request);
+        } catch (MavenInvocationException e) {
             e.printStackTrace();
         }
+        return textPath;
     }
 
-    public void ReadPom(Document document, List<Dependency> dependenciesList) {
-        Element root = document.getRootElement();
-        if (root.element("dependencyManagement") != null) {
-            Element dependencyManagement = root.element("dependencyManagement").element("dependencies");
-            GetDependencies(dependencyManagement, dependenciesList);
-        }
-        Element dependencies = root.element("dependencies");
-        GetDependencies(dependencies, dependenciesList);
-    }
 
     //得到pom文件里的依赖包信息
-    public void GetDependencies(Element parent, List<Dependency> dependenciesList){
-        for(Iterator<Element> it = parent.elementIterator("dependency"); it.hasNext();)
+    public void GetDependencies(Node root, List<Dependency> dependenciesList){
+        for(int i = 0; i < root.getChildNodes().size(); i++)
         {
-            Element element=it.next();
-            Iterator itt = element.elementIterator();
             Dependency dependency = new Dependency();
-            while(itt.hasNext()){
-                Element value = (Element) itt.next();
-                if(value.getName().equals("artifactId")){
-                    dependency.setArtifact_id(value.getStringValue());
-                }
-                else if (value.getName().equals("version") && !value.getStringValue().equals("${project.version}")){
-                    dependency.setVersion(value.getStringValue());
-                }
-                else if(value.getName().equals("groupId")){
-                    dependency.setGroup_id(value.getStringValue());
-                }
-            }
+            dependency.setGroup_id(root.getChildNode(i).getGroupId());
+            dependency.setArtifact_id(root.getChildNode(i).getArtifactId());
+            dependency.setVersion(root.getChildNode(i).getVersion());
 
             //若数据库有则返回数据库数据，若没有则爬下来加入数据库
             if(dependency.getArtifact_id() != null && dependency.getVersion() != null){
@@ -91,6 +62,7 @@ public class PacService {
                     String url = "https://mvnrepository.com/artifact/" + dependency.getGroup_id() + "/" + dependency.getArtifact_id();
                     getAll(url,dependency);
                     dependenciesList.add(dependency);
+
                     pacDao.insert(dependency);
                 }
                 else{
@@ -117,7 +89,8 @@ public class PacService {
 
             //找到得到新版本号
             for(org.jsoup.nodes.Element element : latestversionValue) {
-                if (element.text().matches("^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}.*$")) {
+                System.out.println(element);
+                if (element.text().matches("^\\d{1,3}\\..*$")) {
                     tmp = element.text();
                     String ragex = "[^(a-zA-Z)]";
                     String stableSign = tmp.replaceAll(ragex, "");////提取版本号中的字母部分，以查看是否是稳定版本
@@ -166,47 +139,4 @@ public class PacService {
         String bestVersion = versionList.get(usageList.indexOf(Collections.max(usageList)));
         dependency.setPopular_version(bestVersion);
     }
-
-    public static InputStream JarRead(String filepath) throws IOException{
-        InputStream input = new InputStream() { //创造一个input实例，内容不重要
-            @Override
-            public int read() {
-                return -1;  // end of stream
-            }
-        };
-        JarFile jarFile = new JarFile(filepath);
-        Enumeration enu = jarFile.entries();
-        while(enu.hasMoreElements()){
-            String pompath = "";
-            JarEntry element = (JarEntry) enu.nextElement();
-            String name = element.getName();  //获取Jar包中的条目名字
-            Pattern r = Pattern.compile("(pom.xml)$");
-            Matcher m = r.matcher(name);
-            if(m.find()){
-                pompath = name;
-                JarEntry entry = jarFile.getJarEntry(pompath);
-                input = jarFile.getInputStream(entry); //获取该文件的输入流
-            }
-        }
-        return input;
-    }
-
-    public void SetNoPomDependencies(List<Dependency> dependenciesList, String fileName){
-        Dependency dependency = new Dependency();
-        dependency.setArtifact_id("");
-        dependency.setVersion("");
-        dependency.setGroup_id(fileName+"没有检测到pom.xml文件，请扫描其他Jar包");
-        ArrayList<String> versionList= new ArrayList<>();
-        ArrayList<Integer> usageList = new ArrayList<>();
-        versionList.add("");
-        usageList.add(null);
-        String license = "";
-        dependency.setVersionList(versionList);
-        dependency.setUsageList(usageList);
-        dependency.setPopular_version("");
-        dependency.setStable_version("");
-        dependency.setLicense(license);
-        dependenciesList.add(dependency);
-    }
-
 }

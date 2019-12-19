@@ -1,6 +1,10 @@
 package com.owlaser.paclist.controller;
+import com.owlaser.paclist.entity.CheckMessage;
 import com.owlaser.paclist.entity.Dependency;
+import com.owlaser.paclist.service.DependencyTreeService;
+import com.owlaser.paclist.service.LicenseService;
 import com.owlaser.paclist.service.PacService;
+import fr.dutra.tools.maven.deptree.core.Node;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
@@ -29,44 +33,67 @@ public class PacController {
     @Autowired
     private PacService pacService;
 
+    @Autowired
+    private  LicenseService licenseService;
+
     @GetMapping(value = "/")
-    public String show(){
+    public String show() {
         return "upload";
     }
 
+    @ResponseBody
     @PostMapping(value = "/upload")
-    public void upload(@RequestParam("file")MultipartFile file, Model model){
-        if(file.isEmpty()){
-            model.addAttribute("messages", "文件上传失败！文件为空");
-            return;
-        }
-        try{
+    public List upload(@RequestParam("file") MultipartFile file) {
+        ArrayList<Dependency> dependenciesList = new ArrayList<>();
+        try {
             byte[] bytes = file.getBytes();
-            String path1= System.getProperty("user.dir") + "/repository" + "/pom/";
-            Path path = Paths.get(path1 + file.getOriginalFilename());
-            Files.write(path, bytes);
-            model.addAttribute("messages", "文件上传成功！开始扫描");
-            ArrayList<Dependency> dependenciesList = new ArrayList<>();
-            Pattern r = Pattern.compile("(pom.xml)$");
-            Matcher m = r.matcher(file.getOriginalFilename());
-            if(m.find()){
-                pacService.ScanPacPom(path1 + file.getOriginalFilename(),dependenciesList);
-            }
-            else {
-                InputStream input = pacService.JarRead(path1 + file.getOriginalFilename());
-                pacService.ScanPacJar(input, file.getOriginalFilename(), dependenciesList);
-            }
-            model.addAttribute("dependenciesList", dependenciesList);
-        }
-        catch (IOException e){
+            String folderPath = "./repository/pom/";
+            Path pomPath = Paths.get(folderPath + file.getOriginalFilename());
+            Files.write(pomPath, bytes);
+            String textPath = pacService.CreateDependencyText(folderPath, pomPath);
+            Node root = DependencyTreeService.GetRoot(textPath);
+            pacService.GetDependencies(root, dependenciesList);
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        return;
+        return dependenciesList;
     }
 
     @GetMapping(value = "/uploadStatus")
-    public String uploadStatus(){
+    public String uploadStatus() {
         return "uploadStatus";
+    }
+
+
+
+
+    ArrayList<Dependency> dependenciesList = new ArrayList<>();
+
+    /************************************************************************************/
+    /*******************************license冲突检测***************************************/
+    /************************************************************************************/
+    @ResponseBody
+    @PostMapping(value = "/licensecheck")
+    public CheckMessage licensecheck(@RequestParam("file") MultipartFile file){
+        CheckMessage checkMessage = new CheckMessage();
+        ArrayList<String> licenseAllList= new ArrayList<>();
+        for(Dependency dependency:dependenciesList){
+               String[] sqlit = dependency.getLicense().split("  ");
+               for(int i=0; i<sqlit.length;i++) {
+                   if (licenseAllList.contains(sqlit[i])) {
+                       continue;
+                   } else {
+                       licenseAllList.add(sqlit[i]);
+                   }
+                   System.out.println(sqlit[i]);
+               }
+        }
+        System.out.println(licenseAllList);
+        System.out.println(dependenciesList);
+
+        licenseService.licensecheck(licenseAllList,checkMessage);
+
+        return checkMessage;
     }
 
 }
