@@ -59,23 +59,22 @@
     <!--        <td th:text="${messages}"></td>-->
     <table class="table table-striped" style="text-align: center">
         <tr style="font-weight: bold">
-            <td>包名</td>
-            <td>groupid</td>
-            <td>artifactid</td>
-            <td>当前版本</td>
-            <td>热度最高版本</td>
-            <td>最新稳定版本</td>
-            <td>版本License</td>
+            <td>开源要求</td>
+            <td>专利授权</td>
+            <td>商标授权</td>
+            <td>修改声明</td>
+            <td>使用相同协议</td>
+<
         </tr>
-        <tr th:each="dependency : ${dependenciesList}">
-            <td th:text="${dependency.artifact_id}"></td>
-            <td th:text="${dependency.group_id}"></td>
-            <td th:text="${dependency.artifact_id}"></td>
-            <td th:text="${dependency.version}"></td>
-            <td th:text="${dependency.popular_version}"></td>
-            <td th:text="${dependency.stable_version}"></td>
-            <td th:text="${dependency.license}"></td>
+        <tr >
+            <td th:text="${checkMessage.opensourcelicense}"></td>
+            <td th:text="${checkMessage.patentlicense}"></td>
+            <td th:text="${checkMessage.brandlicense}"></td>
+            <td th:text="${checkMessage.statechangelicense}"></td>
+            <td th:text="${checkMessage.usesamelicense}"></td>
         </tr>
+
+
     </table>
 </div>
 
