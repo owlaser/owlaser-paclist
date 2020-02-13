@@ -1,7 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="37bc93aa-a92f-42dc-af6e-1a25bebb73f8" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/owlaser/paclist/entity/ChildNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/owlaser/paclist/controller/GlobalExceptionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/owlaser/paclist/controller/PacController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/owlaser/paclist/controller/PacController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/owlaser/paclist/dao/PacDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/owlaser/paclist/dao/PacDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/owlaser/paclist/service/PacService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/owlaser/paclist/service/PacService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/owlaser/paclist/controller/GlobalExceptionHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/owlaser/paclist/controller/PacController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/owlaser/paclist/controller/PacController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/owlaser/paclist/dao/PacDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/owlaser/paclist/dao/PacDao.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/owlaser/paclist/service/PacService$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/owlaser/paclist/service/PacService$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/owlaser/paclist/service/PacService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/owlaser/paclist/service/PacService.class" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
   <component name="CompilerWorkspaceConfiguration">
     <option name="MAKE_PROJECT_ON_SAVE" value="true" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -14,7 +43,12 @@
     </option>
   </component>
   <component name="ProjectId" id="1Xi14Sxfwk9hJqk9Suq19CgOAXa" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
+    <property name="RequestMappingsPanelOrder0" value="0" />
+    <property name="RequestMappingsPanelOrder1" value="1" />
+    <property name="RequestMappingsPanelWidth0" value="75" />
+    <property name="RequestMappingsPanelWidth1" value="75" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="nodejs.mocha.mocha_node_package_dir" value="" />
@@ -43,5 +77,33 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="37bc93aa-a92f-42dc-af6e-1a25bebb73f8" name="Default Changelist" comment="" />
+      <created>1581513909330</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1581513909330</updated>
+      <workItem from="1581513912257" duration="426000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

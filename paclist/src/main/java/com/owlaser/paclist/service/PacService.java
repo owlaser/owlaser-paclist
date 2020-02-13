@@ -71,7 +71,6 @@ public class PacService {
             if(dependency.getArtifact_id() != null && dependency.getVersion() != null){
                 String SqlArtifactId = pacDao.getArtifactId(dependency.getArtifact_id(), dependency.getGroup_id());
                 if(SqlArtifactId == null){
-                    System.out.println(dependency.getGroup_id());
                     String url = "https://mvnrepository.com/artifact/" + dependency.getGroup_id() + "/" + dependency.getArtifact_id();
                     getAll(url, dependency);
                     dependenciesList.add(dependency);
@@ -81,6 +80,15 @@ public class PacService {
                     Dependency SqlDependency = pacDao.getSqlDependency(dependency.getArtifact_id(), dependency.getGroup_id());
                     SqlDependency.setVersion(dependency.getVersion());
                     dependenciesList.add(SqlDependency);
+                }
+
+                String sqlParentArtifact_id = pacDao.getParentArtifactId(dependency.getArtifact_id(), dependency.getGroup_id());
+                if(sqlParentArtifact_id == null){
+                    Node parentNode = root.getChildNode(i);
+                    for(int child = 0; child < parentNode.getChildNodes().size(); child++){
+                        String url = "https://mvnrepository.com/artifact/" + parentNode.getChildNode(child).getGroupId() + "/" + parentNode.getChildNode(child).getArtifactId();
+                        pacDao.insertChild(parentNode.getGroupId(), parentNode.getArtifactId(), parentNode.getChildNode(child).getGroupId(), parentNode.getChildNode(child).getArtifactId(), url);
+                    }
                 }
             }
         }
@@ -196,4 +204,10 @@ public class PacService {
         return new byte[0];
     }
 
+    /**
+     * 获得当前包下的所有依赖包信息
+     */
+    public List getParentDependencies(String groupId, String artifactId){
+        return pacDao.getParentDependencies(artifactId, groupId);
+    }
 }

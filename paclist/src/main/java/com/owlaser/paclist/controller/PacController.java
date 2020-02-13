@@ -1,5 +1,6 @@
 package com.owlaser.paclist.controller;
 import com.owlaser.paclist.entity.CheckMessage;
+import com.owlaser.paclist.entity.ChildNode;
 import com.owlaser.paclist.entity.Dependency;
 import com.owlaser.paclist.service.DependencyTreeService;
 import com.owlaser.paclist.service.LicenseService;
@@ -98,6 +99,16 @@ public class PacController {
         licenseService.licensecheck(licenseAllList,checkMessage);
 
         return checkMessage;
+    }
+
+    /**
+     * 查询依赖信息接口
+     */
+    @ResponseBody
+    @GetMapping(value = "/getdependency")
+    public Object getDependency(String groupId, String artifactId){
+        List<ChildNode> childNodes = pacService.getParentDependencies(groupId, artifactId);
+        return ResponseUtil.okList(childNodes);
     }
 
 }
