@@ -1,10 +1,13 @@
 package com.owlaser.paclist.service;
 
-import fr.dutra.tools.maven.deptree.core.InputType;
-import fr.dutra.tools.maven.deptree.core.Node;
-import fr.dutra.tools.maven.deptree.core.Parser;
+import fr.dutra.tools.maven.deptree.core.*;
 
 import java.io.*;
+
+/**
+ * 从txt文件获得依赖树信息
+ * 返回树的根root
+ */
 
 public class DependencyTreeService {
 
