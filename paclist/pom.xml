@@ -12,7 +12,7 @@
     <artifactId>paclist</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>paclist</name>
-    <description>Demo project for Spring Boot</description>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
@@ -21,15 +21,15 @@
         </dependency>
 
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <scope>5.1.6</scope>
-        </dependency>
-
-        <dependency>
             <groupId> org.apache.maven</groupId>
             <artifactId>maven-artifact</artifactId>
             <version>3.1.0-alpha-1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>5.1.46</scope>
         </dependency>
 
         <dependency>
@@ -107,7 +107,13 @@
             <artifactId>maven-invoker</artifactId>
             <version>3.0.1</version>
         </dependency>
-        
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.15</version>
+        </dependency>
+
     </dependencies>
 
     <build>

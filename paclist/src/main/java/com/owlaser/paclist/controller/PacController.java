@@ -4,19 +4,15 @@ import com.owlaser.paclist.entity.Dependency;
 import com.owlaser.paclist.service.DependencyTreeService;
 import com.owlaser.paclist.service.LicenseService;
 import com.owlaser.paclist.service.PacService;
+import com.owlaser.paclist.util.ResponseUtil;
 import fr.dutra.tools.maven.deptree.core.Node;
-import org.dom4j.Document;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -43,35 +39,43 @@ public class PacController {
 
     @ResponseBody
     @PostMapping(value = "/upload")
-    public List upload(@RequestParam("file") MultipartFile file) {
+    public Object upload(@RequestParam("file") MultipartFile file) {
+        if(!file.getOriginalFilename().equals("pom.xml") && !file.getOriginalFilename().matches(".*\\.jar")){
+            return ResponseUtil.badArgument();
+        }
+
         ArrayList<Dependency> dependenciesList = new ArrayList<>();
         try {
             byte[] bytes = file.getBytes();
             String folderPath = "./repository/pom/";
-            Path pomPath = Paths.get(folderPath + file.getOriginalFilename());
-            Files.write(pomPath, bytes);
-            String textPath = pacService.CreateDependencyText(folderPath, pomPath);
+            Path filePath = Paths.get(folderPath + file.getOriginalFilename());
+            Files.write(filePath, bytes);
+            Pattern r = Pattern.compile("(pom.xml)$");
+            Matcher m = r.matcher(file.getOriginalFilename());
+
+            if(!m.find()){
+                byte[] pomFile = pacService.JarRead(folderPath + file.getOriginalFilename());
+                if(pomFile.length == 1) return ResponseUtil.noPom();
+                Files.write(filePath, pomFile);
+            }
+
+            String textPath = pacService.CreateDependencyText(folderPath, filePath);
             Node root = DependencyTreeService.GetRoot(textPath);
             pacService.GetDependencies(root, dependenciesList);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return dependenciesList;
-    }
 
-    @GetMapping(value = "/uploadStatus")
-    public String uploadStatus() {
-        return "uploadStatus";
+        return ResponseUtil.okList(dependenciesList);
     }
-
 
 
 
     ArrayList<Dependency> dependenciesList = new ArrayList<>();
 
-    /************************************************************************************/
-    /*******************************license冲突检测***************************************/
-    /************************************************************************************/
+    /**
+     * license冲突检测
+     */
     @ResponseBody
     @PostMapping(value = "/licensecheck")
     public CheckMessage licensecheck(@RequestParam("file") MultipartFile file){

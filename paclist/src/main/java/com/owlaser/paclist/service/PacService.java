@@ -6,28 +6,39 @@ import fr.dutra.tools.maven.deptree.core.Node;
 import org.apache.maven.shared.invoker.*;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
-import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * 获得依赖信息的函数
+ */
+
 @Service
 public class PacService {
-    @Autowired(required = false)
+    @Autowired
     private PacDao pacDao;
 
+    /**
+     *运行maven命令，得到依赖树txt文件并返回txt的路径
+     */
     public String CreateDependencyText(String folderPath, Path pomPath) {
         InvocationRequest request = new DefaultInvocationRequest();
         request.setPomFile(new File(String.valueOf(pomPath)));
@@ -45,7 +56,9 @@ public class PacService {
     }
 
 
-    //得到pom文件里的依赖包信息
+    /**
+     * 得到pom文件里的依赖包信息
+     */
     public void GetDependencies(Node root, List<Dependency> dependenciesList){
         for(int i = 0; i < root.getChildNodes().size(); i++)
         {
@@ -60,9 +73,8 @@ public class PacService {
                 if(SqlArtifactId == null){
                     System.out.println(dependency.getGroup_id());
                     String url = "https://mvnrepository.com/artifact/" + dependency.getGroup_id() + "/" + dependency.getArtifact_id();
-                    getAll(url,dependency);
+                    getAll(url, dependency);
                     dependenciesList.add(dependency);
-
                     pacDao.insert(dependency);
                 }
                 else{
@@ -75,6 +87,9 @@ public class PacService {
         return;
     }
 
+    /**
+     *在所用url中得到依赖包的所有参数（版本号，热度等）
+     */
     public void getAll(String url, Dependency dependency){
         String tmp="";
         ArrayList<String> versionList= new ArrayList<>();
@@ -90,7 +105,7 @@ public class PacService {
             //找到得到新版本号
             for(org.jsoup.nodes.Element element : latestversionValue) {
                 System.out.println(element);
-                if (element.text().matches("^\\d{1,3}\\..*$")) {
+                if (element.text().matches("^\\d{1,3}\\..*$") || element.text().matches("^\\d{1,3}$")) {
                     tmp = element.text();
                     String ragex = "[^(a-zA-Z)]";
                     String stableSign = tmp.replaceAll(ragex, "");////提取版本号中的字母部分，以查看是否是稳定版本
@@ -139,4 +154,46 @@ public class PacService {
         String bestVersion = versionList.get(usageList.indexOf(Collections.max(usageList)));
         dependency.setPopular_version(bestVersion);
     }
+
+    /**
+     * 读取jar包
+     * 获得jar包中的pom文件的字节流数组
+     */
+    public static byte[] JarRead(String filepath) throws IOException{
+
+        //创造一个input实例，内容不重要
+        InputStream input = new InputStream() {
+            @Override
+            public int read() {
+                return -1;  // end of stream
+            }
+        };
+        JarFile jarFile = new JarFile(filepath);
+        Enumeration enu = jarFile.entries();
+        while(enu.hasMoreElements()){
+            String pompath = "";
+            JarEntry element = (JarEntry) enu.nextElement();
+
+            //获取Jar包中的条目名字
+            String name = element.getName();
+            Pattern r = Pattern.compile("(pom.xml)$");
+            Matcher m = r.matcher(name);
+            if(m.find()){
+                pompath = name;
+                JarEntry entry = jarFile.getJarEntry(pompath);
+
+                //获取该文件的输入流
+                input = jarFile.getInputStream(entry);
+                ByteArrayOutputStream output = new ByteArrayOutputStream();
+                byte[] buffer = new byte[4096];
+                int n = 0;
+                while (-1 != (n = input.read(buffer))) {
+                    output.write(buffer, 0, n);
+                }
+                return output.toByteArray();
+            }
+        }
+        return new byte[0];
+    }
+
 }
