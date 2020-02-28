@@ -2,6 +2,7 @@ package com.owlaser.paclist.controller;
 import com.owlaser.paclist.entity.CheckMessage;
 import com.owlaser.paclist.entity.ChildNode;
 import com.owlaser.paclist.entity.Dependency;
+import com.owlaser.paclist.entity.sum;
 import com.owlaser.paclist.service.DependencyTreeService;
 import com.owlaser.paclist.service.LicenseService;
 import com.owlaser.paclist.service.PacService;
@@ -66,40 +67,41 @@ public class PacController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return ResponseUtil.okList(dependenciesList);
+        sum s = new sum(dependenciesList,licenseService.getConflic(dependenciesList));
+        return s;
+        //return ResponseUtil.okList(dependenciesList);
     }
 
 
 
-    ArrayList<Dependency> dependenciesList = new ArrayList<>();
-
-    /**
-     * license冲突检测
-     */
-    @ResponseBody
-    @PostMapping(value = "/licensecheck")
-    public CheckMessage licensecheck(@RequestParam("file") MultipartFile file){
-        CheckMessage checkMessage = new CheckMessage();
-        ArrayList<String> licenseAllList= new ArrayList<>();
-        for(Dependency dependency:dependenciesList){
-               String[] sqlit = dependency.getLicense().split("  ");
-               for(int i=0; i<sqlit.length;i++) {
-                   if (licenseAllList.contains(sqlit[i])) {
-                       continue;
-                   } else {
-                       licenseAllList.add(sqlit[i]);
-                   }
-                   System.out.println(sqlit[i]);
-               }
-        }
-        System.out.println(licenseAllList);
-        System.out.println(dependenciesList);
-
-        licenseService.licensecheck(licenseAllList,checkMessage);
-
-        return checkMessage;
-    }
+//    ArrayList<Dependency> dependenciesList = new ArrayList<>();
+//
+//    /**
+//     * license冲突检测
+//     */
+//    @ResponseBody
+//    @PostMapping(value = "/licensecheck")
+//    public CheckMessage licensecheck(@RequestParam("file") MultipartFile file){
+//        CheckMessage checkMessage = new CheckMessage();
+//        ArrayList<String> licenseAllList= new ArrayList<>();
+//        for(Dependency dependency:dependenciesList){
+//               String[] sqlit = dependency.getLicense().split("  ");
+//               for(int i=0; i<sqlit.length;i++) {
+//                   if (licenseAllList.contains(sqlit[i])) {
+//                       continue;
+//                   } else {
+//                       licenseAllList.add(sqlit[i]);
+//                   }
+//                   System.out.println(sqlit[i]);
+//               }
+//        }
+//        System.out.println(licenseAllList);
+//        System.out.println(dependenciesList);
+//
+//       licenseService.licensecheck(licenseAllList,checkMessage);
+//
+//        return checkMessage;
+//    }
 
     /**
      * 查询依赖信息接口

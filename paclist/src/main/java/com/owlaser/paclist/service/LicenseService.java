@@ -2,12 +2,33 @@ package com.owlaser.paclist.service;
 
 
 import com.owlaser.paclist.entity.CheckMessage;
+import com.owlaser.paclist.entity.Dependency;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
 public class LicenseService {
+    public CheckMessage getConflic(ArrayList<Dependency> dependenciesList){
+        CheckMessage checkMessage = new CheckMessage();
+        ArrayList<String> licenseAllList= new ArrayList<>();
+        for(Dependency dependency:dependenciesList){
+            String[] sqlit = dependency.getLicense().split("  ");
+            for(int i=0; i<sqlit.length;i++) {
+                if (licenseAllList.contains(sqlit[i])) {
+                    continue;
+                } else {
+                    licenseAllList.add(sqlit[i]);
+                }
+                System.out.println(sqlit[i]);
+            }
+        }
+
+        licensecheck(licenseAllList,checkMessage);
+
+        return checkMessage;
+    }
+
 
     public  void  licensecheck(ArrayList<String> license, CheckMessage checkMessage){
 

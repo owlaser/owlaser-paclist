@@ -12,6 +12,9 @@ public class Dependency {
     private String stable_version;
    
     private String license;
+
+
+
     private ArrayList<String> licenseList;
 
     public Dependency(String group_id, String artifact_id, String version) {
