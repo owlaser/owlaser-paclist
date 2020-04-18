@@ -2,14 +2,14 @@ package com.owlaser.paclist.entity;
 
 import java.util.ArrayList;
 
-public class sum {
+public class Sum_dependency_license {
     private ArrayList<Dependency> dependenciesList;
     private CheckMessage checkMessage;
 
-    public sum() {
+    public Sum_dependency_license() {
     }
 
-    public sum(ArrayList<Dependency> dependenciesList, CheckMessage checkMessage) {
+    public Sum_dependency_license(ArrayList<Dependency> dependenciesList, CheckMessage checkMessage) {
         this.dependenciesList = dependenciesList;
         this.checkMessage = checkMessage;
     }

@@ -2,7 +2,8 @@ package com.owlaser.paclist.controller;
 import com.owlaser.paclist.entity.CheckMessage;
 import com.owlaser.paclist.entity.ChildNode;
 import com.owlaser.paclist.entity.Dependency;
-import com.owlaser.paclist.entity.sum;
+import com.owlaser.paclist.entity.Sum_dependency_license;
+import com.owlaser.paclist.entity.Sum_dependency_license;
 import com.owlaser.paclist.service.DependencyTreeService;
 import com.owlaser.paclist.service.LicenseService;
 import com.owlaser.paclist.service.PacService;
@@ -67,8 +68,8 @@ public class PacController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        sum s = new sum(dependenciesList,licenseService.getConflic(dependenciesList));
-        return s;
+        Sum_dependency_license sum_dependency_license = new Sum_dependency_license(dependenciesList,licenseService.getConflic(dependenciesList));
+        return sum_dependency_license;
         //return ResponseUtil.okList(dependenciesList);
     }
 
