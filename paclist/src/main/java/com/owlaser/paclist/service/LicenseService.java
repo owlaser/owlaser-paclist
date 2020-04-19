@@ -9,8 +9,9 @@ import java.util.*;
 
 @Service
 public class LicenseService {
-    public CheckMessage getConflic(ArrayList<Dependency> dependenciesList){
-        CheckMessage checkMessage = new CheckMessage();
+    public CheckMessage  getConflic(ArrayList<Dependency> dependenciesList){
+        CheckMessage license_warn = new CheckMessage();
+        Map<String,String> result_map = new HashMap<>();
         ArrayList<String> licenseAllList= new ArrayList<>();
         for(Dependency dependency:dependenciesList){
             String[] sqlit = dependency.getLicense().split("  ");
@@ -20,19 +21,20 @@ public class LicenseService {
                 } else {
                     licenseAllList.add(sqlit[i]);
                 }
-                System.out.println(sqlit[i]);
+                //System.out.println(sqlit[i]);
             }
         }
 
-        licensecheck(licenseAllList,checkMessage);
+        return  licensecheck(licenseAllList,license_warn);
 
-        return checkMessage;
+
     }
 
 
-    public  void  licensecheck(ArrayList<String> license, CheckMessage checkMessage){
-
+    public  CheckMessage  licensecheck(ArrayList<String> license, CheckMessage license_warn){
+        ArrayList<Map<String,String>> sum_judgeMap_List = new ArrayList<>();
         HashMap<String,String> opensourcelicense = new HashMap<String, String>();  //开源
+        StringBuffer notice = new StringBuffer();
         opensourcelicense.put("Apache 2.0","false");
         opensourcelicense.put("Apache","false");
         opensourcelicense.put("GPL 3.0","true");
@@ -54,6 +56,7 @@ public class LicenseService {
         opensourcelicense.put("LGPL","true");
         opensourcelicense.put("MPL","false");
         opensourcelicense.put("MPL 2.0","true");
+        sum_judgeMap_List.add(opensourcelicense);
 
         Map<String,String> patentlicense = new HashMap<String, String>(); //专利
         patentlicense.put("Apache 2.0","true");
@@ -76,7 +79,7 @@ public class LicenseService {
         patentlicense.put("LGPL","true");
         patentlicense.put("MPL","true");
         patentlicense.put("MPL 2.0","true");
-
+        sum_judgeMap_List.add(patentlicense);
 
         Map<String,String> brandlicense = new HashMap<String, String>();//商标
         brandlicense.put("Apache 2.0","false");
@@ -99,6 +102,7 @@ public class LicenseService {
         brandlicense.put("LGPL 2.0","true");
         brandlicense.put("MPL","false");
         brandlicense.put("MPL 2.0","false");
+        sum_judgeMap_List.add(brandlicense);
 
         Map<String,String> statechangelicense = new HashMap<String, String>(); //声明变更
         statechangelicense.put("Apache 2.0","true");
@@ -121,7 +125,7 @@ public class LicenseService {
         statechangelicense.put("LGPL 2.0","true");
         statechangelicense.put("MPL","false");
         statechangelicense.put("MPL 2.0","false");
-
+        sum_judgeMap_List.add(statechangelicense);
 
         Map<String,String> usesamelicense = new HashMap<String, String>(); //使用相同license
         usesamelicense.put("Apache 2.0","false");
@@ -144,186 +148,276 @@ public class LicenseService {
         usesamelicense.put("LGPL 2.0","true");
         usesamelicense.put("MPL","false");
         usesamelicense.put("MPL 2.0","true");
+        sum_judgeMap_List.add(usesamelicense);
+
+        ArrayList<String> license_detail = new ArrayList<>();
+        StringBuffer tool_sb = new StringBuffer();
+          boolean flag = false;
+        /*****************************检测开源方面*********************************/
+        for(int i =0;i<license.size();i++ ){
+            if(sum_judgeMap_List.get(0).containsKey(license.get(i))
+                    &&sum_judgeMap_List.get(0).get(license.get(i)).equals("true")) {
+                flag =true;
+                notice.append("强制要求衍生品开源   ");
+                tool_sb.append(license.get(i)+"  ");
+            }
+        }
+        System.out.println("1");
+        if(flag==true) {license_detail.add("强制要求衍生品开源:"+tool_sb.toString());
+        System.out.println("zxc");
+        }
+        tool_sb.setLength(0); flag=false;
+
+
+        /*****************************检测专利方面*********************************/
+
+        for(int i =0;i<license.size();i++ ){
+            if(sum_judgeMap_List.get(1).containsKey(license.get(i))
+                    &&sum_judgeMap_List.get(1).get(license.get(i)).equals("false")) {
+                flag =true;
+                notice.append("不授予衍生品专利权   ");
+                tool_sb.append(license.get(i)+" ");
+            }
+        }
+        if(flag==true) license_detail.add("不授予衍生品专利权:"+tool_sb.toString());
+        tool_sb.setLength(0); flag=false;
+
+
+        /*****************************检测商标方面*********************************/
+
+        for(int i =0;i<license.size();i++ ){
+            if(sum_judgeMap_List.get(2).containsKey(license.get(i))
+                    &&sum_judgeMap_List.get(2).get(license.get(i)).equals("false")) {
+                flag =true;
+                notice.append("不授权商标使用   ");
+                tool_sb.append(license.get(i)+" ");
+            }
+        }
+        if(flag==true) license_detail.add("不授权商标使用:"+tool_sb.toString());
+        tool_sb.setLength(0); flag=false;
+
+
+        /*****************************检测声明更变 *********************************/
+
+        for(int i =0;i<license.size();i++ ){
+            if(sum_judgeMap_List.get(3).containsKey(license.get(i))
+                    &&sum_judgeMap_List.get(3).get(license.get(i)).equals("true")) {
+                flag =true;
+                notice.append("必须声明修改记录   ");
+                tool_sb.append(license.get(i)+" ");
+            }
+        }
+        if(flag==true) license_detail.add("必须声明修改记录:"+tool_sb.toString());
+        tool_sb.setLength(0); flag=false;
+
+
+        /*****************************检测使用相同协议 *********************************/
+
+        for(int i =0;i<license.size();i++ ){
+            if(sum_judgeMap_List.get(4).containsKey(license.get(i))
+                    &&sum_judgeMap_List.get(4).get(license.get(i)).equals("true")) {
+                flag =true;
+                notice.append("强制要求衍生品使用同一协议   ");
+                tool_sb.append(license.get(i)+" ");
+            }
+        }
+        if(flag==true) license_detail.add("强制要求衍生品使用同一协议:"+tool_sb.toString());
+        tool_sb.setLength(0); flag=false;
+
+        license_warn.setNotice(notice.toString());
+        license_warn.setLicense_detail(license_detail);
+      return license_warn;
+
+
+
+
+
+
+
+
+
+
+
 
 
 
         /*****************************检测开源方面的license冲突*********************************/
-        int opensourceflag = 0;
-        String opensourceResult = null;
-        for(int i = 0; i<license.size();i++) {
-            for (int j = i+1; j < license.size(); j++) {
-                if(opensourcelicense.get(license.get(i)) != opensourcelicense.get(license.get(j))){
-                    opensourceflag =1;
-                    break;
-                }
-            }
-            break;
-        }
-        if(opensourceflag ==1){
-            //System.out.println("在开源方面检测到license冲突!");
-            opensourceResult = "在开源方面检测到要求不一致的license!\n";
-            for(String string:license){
-                if(opensourcelicense.get(string)== "true"){
-                    //System.out.println(string+"强制要求衍生品开源");
-                    opensourceResult = opensourceResult+string+"强制要求衍生品开源\n";
-                }
-            }
-            for(String string:license){
-                if(opensourcelicense.get(string)== "false"){
-                   // System.out.println(string+"不强制要求衍生品开源");
-                    opensourceResult = opensourceResult+string+"不强制要求衍生品开源\n";
-                }
-            }
-        }
-        else{ //System.out.println("在开源方面未检测到license冲突");
-           opensourceResult = "在开源方面未检测到license冲突!\n";
-        }
-        checkMessage.setOpensourcelicense(opensourceResult);
+//        int opensourceflag = 0;
+//        String opensourceResult = null;
+//        for(int i = 0; i<license.size();i++) {
+//            for (int j = i+1; j < license.size(); j++) {
+//                if(opensourcelicense.get(license.get(i)) != opensourcelicense.get(license.get(j))){
+//                    opensourceflag =1;
+//                    break;
+//                }
+//            }
+//            break;
+//        }
+//        if(opensourceflag ==1){
+//            //System.out.println("在开源方面检测到license冲突!");
+//            opensourceResult = "在开源方面检测到要求不一致的license!\n";
+//            for(String string:license){
+//                if(opensourcelicense.get(string)== "true"){
+//                    //System.out.println(string+"强制要求衍生品开源");
+//                    opensourceResult = opensourceResult+string+"强制要求衍生品开源\n";
+//                }
+//            }
+//            for(String string:license){
+//                if(opensourcelicense.get(string)== "false"){
+//                   // System.out.println(string+"不强制要求衍生品开源");
+//                    opensourceResult = opensourceResult+string+"不强制要求衍生品开源\n";
+//                }
+//            }
+//        }
+//        else{ //System.out.println("在开源方面未检测到license冲突");
+//           opensourceResult = "在开源方面未检测到license冲突!\n";
+//        }
+//        checkMessage.setOpensourcelicense(opensourceResult);
 
 
 
 
         /*****************************检测专利方面的license冲突*********************************/
-        int patentlicenseflag=0;
-        String patentResult = null;
-        for(int i = 0; i<license.size();i++) {
-            for (int j = i+1; j < license.size(); j++) {
-                if(patentlicense.get(license.get(i)) != patentlicense.get(license.get(j))){
-                    patentlicenseflag = 1;
-                    break;
-                }
-            }
-            break;
-        }
-        if(patentlicenseflag ==1){
-           // System.out.println("在专利授权方面检测到license冲突!");
-            patentResult = "在专利授权方面检测到要求不一致的license!\n";
-            for(String string:license){
-                if(patentlicense.get(string)== "true"){
-                   // System.out.println(string+"授予衍生品专利权");
-                    patentResult = patentResult + string +"授予衍生品专利权\n";
-                }
-            }
-            for(String string:license){
-                if(patentlicense.get(string)== "false"){
-                   // System.out.println(string+"不授予衍生品专利权");
-                    patentResult = patentResult + string +"不授予衍生品专利权\n";
-                }
-            }
-        }
-        else{ //System.out.println("在专利授权方面未检测到license冲突");
-            patentResult = "在专利授权方面未检测到license冲突\n";
-        }
-        checkMessage.setPatentlicense(patentResult);
+//        int patentlicenseflag=0;
+//        String patentResult = null;
+//        for(int i = 0; i<license.size();i++) {
+//            for (int j = i+1; j < license.size(); j++) {
+//                if(patentlicense.get(license.get(i)) != patentlicense.get(license.get(j))){
+//                    patentlicenseflag = 1;
+//                    break;
+//                }
+//            }
+//            break;
+//        }
+//        if(patentlicenseflag ==1){
+//           // System.out.println("在专利授权方面检测到license冲突!");
+//            patentResult = "在专利授权方面检测到要求不一致的license!\n";
+//            for(String string:license){
+//                if(patentlicense.get(string)== "true"){
+//                   // System.out.println(string+"授予衍生品专利权");
+//                    patentResult = patentResult + string +"授予衍生品专利权\n";
+//                }
+//            }
+//            for(String string:license){
+//                if(patentlicense.get(string)== "false"){
+//                   // System.out.println(string+"不授予衍生品专利权");
+//                    patentResult = patentResult + string +"不授予衍生品专利权\n";
+//                }
+//            }
+//        }
+//        else{ //System.out.println("在专利授权方面未检测到license冲突");
+//            patentResult = "在专利授权方面未检测到license冲突\n";
+//        }
+//        checkMessage.setPatentlicense(patentResult);
 
 
         /*****************************检测商标方面的license冲突*********************************/
-        int brandlicenseflag = 0;
-        String brandResult = null;
-        for(int i = 0; i<license.size();i++) {
-            for (int j = i+1; j < license.size(); j++) {
-                if(brandlicense.get(license.get(i)) != brandlicense.get(license.get(j))){
-                    brandlicenseflag = 1;
-                    break;
-                }
-            }
-            break;
-        }
-        if(brandlicenseflag == 1){
-            brandResult ="检测到要求不一致的license!\n";
-            for(String string:license){
-                if(brandlicense.get(string)== "true"){
-                   // System.out.println(string+"授权商标使用");
-                    brandResult = brandResult+string+"授权商标使用\n";
-                }
-            }
+//        int brandlicenseflag = 0;
+//        String brandResult = null;
+//        for(int i = 0; i<license.size();i++) {
+//            for (int j = i+1; j < license.size(); j++) {
+//                if(brandlicense.get(license.get(i)) != brandlicense.get(license.get(j))){
+//                    brandlicenseflag = 1;
+//                    break;
+//                }
+//            }
+//            break;
+//        }
+//        if(brandlicenseflag == 1){
+//            brandResult ="检测到要求不一致的license!\n";
+//            for(String string:license){
+//                if(brandlicense.get(string)== "true"){
+//                   // System.out.println(string+"授权商标使用");
+//                    brandResult = brandResult+string+"授权商标使用\n";
+//                }
+//            }
+//
+//            for(String string:license){
+//                if(brandlicense.get(string)== "false"){
+//                   // System.out.println(string+"不授权商标使用");
+//                    brandResult = brandResult+string+"不授权商标使用\n";
+//                }
+//            }
+//        }
+//        else{
+//            //System.out.println("未检测到license冲突");
+//            brandResult = "未检测到license冲突\n";
+//        }
+//        checkMessage.setBrandlicense(brandResult);
 
-            for(String string:license){
-                if(brandlicense.get(string)== "false"){
-                   // System.out.println(string+"不授权商标使用");
-                    brandResult = brandResult+string+"不授权商标使用\n";
-                }
-            }
-        }
-        else{
-            //System.out.println("未检测到license冲突");
-            brandResult = "未检测到license冲突\n";
-        }
-        checkMessage.setBrandlicense(brandResult);
-
-        /*****************************检测声明更变方面的license冲突*********************************/
-        int statechangelicenseflag = 0;
-        String statechangeResult = null;
-        for(int i = 0; i<license.size();i++) {
-            for (int j = i+1; j < license.size(); j++) {
-                if(statechangelicense.get(license.get(i)) != statechangelicense.get(license.get(j))){
-                    statechangelicenseflag =1;
-                    break;
-                }
-            }
-            break;
-        }
-
-        if(statechangelicenseflag == 1){
-            //System.out.println("检测到license冲突!");
-            statechangeResult = "检测到要求不一致的license!\n";
-            for(String string:license){
-                if(statechangelicense.get(string)== "true"){
-                    //System.out.println(string+"要求声明修改记录");
-                    statechangeResult = statechangeResult+string +"要求声明修改记录\n";
-                }
-            }
-
-            for(String string:license){
-                if(statechangelicense.get(string)== "false"){
-                    //System.out.println(string+"不要求声明修改记录");
-                    statechangeResult = statechangeResult+string +"不要求声明修改记录\n";
-                }
-            }
-        }
-        else{
+        /*****************************检测声明更变方面的license冲突 要求声明修改记录*********************************/
+//        int statechangelicenseflag = 0;
+//        String statechangeResult = null;
+//        for(int i = 0; i<license.size();i++) {
+//            for (int j = i+1; j < license.size(); j++) {
+//                if(statechangelicense.get(license.get(i)) != statechangelicense.get(license.get(j))){
+//                    statechangelicenseflag =1;
+//                    break;
+//                }
+//            }
+//            break;
+//        }
+//
+//        if(statechangelicenseflag == 1){
+//            //System.out.println("检测到license冲突!");
+//            statechangeResult = "检测到要求不一致的license!\n";
+//            for(String string:license){
+//                if(statechangelicense.get(string)== "true"){
+//                    //System.out.println(string+"要求声明修改记录");
+//                    statechangeResult = statechangeResult+string +"要求声明修改记录\n";
+//                }
+//            }
+//
+//            for(String string:license){
+//                if(statechangelicense.get(string)== "false"){
+//                    //System.out.println(string+"不要求声明修改记录");
+//                    statechangeResult = statechangeResult+string +"不要求声明修改记录\n";
+//                }
+//            }
+//        }
+//        else{
            //System.out.println("未检测到license冲突");
-            statechangeResult = "未检测到license冲突\n";
-        }
-        checkMessage.setStatechangelicense(statechangeResult);
+//            statechangeResult = "未检测到license冲突\n";
+//        }
+//        checkMessage.setStatechangelicense(statechangeResult);
 
 
-        /*****************************检测使用相同协议方面的license冲突*********************************/
-        int usesamelicenseflag = 0;
-        String usesameResult = null;
-        for(int i = 0; i<license.size();i++) {
-            for (int j = i+1; j < license.size(); j++) {
-                if(usesamelicense.get(license.get(i)) != usesamelicense.get(license.get(j))){
-                    usesamelicenseflag = 1;
-                    break;
-                }
-            }
-            break;
-        }
-
-        if(usesamelicenseflag == 1){
-            //System.out.println("检测到license冲突!");
-            usesameResult = "检测到要求不一致的license!\n";
-            for(String string:license){
-                if(usesamelicense.get(string)== "true"){
-                    //System.out.println(string+"强制要求衍生品使用同一协议");
-                    usesameResult = usesameResult+string+"强制要求衍生品使用同一协议\n";
-                }
-            }
-
-            for(String string:license){
-                if(usesamelicense.get(string)== "false"){
-                   // System.out.println(string+"不强制要求衍生品使用同一协议");
-                    usesameResult = usesameResult+string+"不强制要求衍生品使用同一协议\n";
-                }
-            }
-
-        }
-        else{
-            //System.out.println("未检测到license冲突");
-            usesameResult = "未检测到license冲突\n";
-        }
-        checkMessage.setUsesamelicense(usesameResult);
+        /*****************************检测使用相同协议方面的license冲突 强制要求衍生品使用同一协议*********************************/
+//        int usesamelicenseflag = 0;
+//        String usesameResult = null;
+//        for(int i = 0; i<license.size();i++) {
+//            for (int j = i+1; j < license.size(); j++) {
+//                if(usesamelicense.get(license.get(i)) != usesamelicense.get(license.get(j))){
+//                    usesamelicenseflag = 1;
+//                    break;
+//                }
+//            }
+//            break;
+//        }
+//
+//        if(usesamelicenseflag == 1){
+//            //System.out.println("检测到license冲突!");
+//            usesameResult = "检测到要求不一致的license!\n";
+//            for(String string:license){
+//                if(usesamelicense.get(string)== "true"){
+//                    //System.out.println(string+"强制要求衍生品使用同一协议");
+//                    usesameResult = usesameResult+string+"强制要求衍生品使用同一协议\n";
+//                }
+//            }
+//
+//            for(String string:license){
+//                if(usesamelicense.get(string)== "false"){
+//                   // System.out.println(string+"不强制要求衍生品使用同一协议");
+//                    usesameResult = usesameResult+string+"不强制要求衍生品使用同一协议\n";
+//                }
+//            }
+//
+//        }
+//        else{
+//            //System.out.println("未检测到license冲突");
+//            usesameResult = "未检测到license冲突\n";
+//        }
+//        checkMessage.setUsesamelicense(usesameResult);
 
 
 
