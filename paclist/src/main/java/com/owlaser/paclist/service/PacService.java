@@ -7,6 +7,7 @@ import org.apache.maven.shared.invoker.*;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,7 @@ public class PacService {
         request.setGoals(Collections.singletonList("dependency:tree -D outputFile=dependency_tree -D outputType=text"));
         Invoker invoker = new DefaultInvoker();
         // 指定本机的MAVEN_HOME地址，参考invoker.setMavenHome(new File(System.getenv("MAVEN_HOME")));
-        invoker.setMavenHome(new File(System.getenv("MAVEN_HOME")));
+        invoker.setMavenHome(new File("/usr/share/maven"));
         try {
             invoker.execute(request);
         } catch (MavenInvocationException e) {
@@ -209,5 +210,12 @@ public class PacService {
      */
     public List getParentDependencies(String groupId, String artifactId){
         return pacDao.getParentDependencies(artifactId, groupId);
+    }
+
+    /**
+     * 获得漏洞信息
+     */
+    public List getSecurityAdvise(String name){
+        return pacDao.getSecurityMessage(name);
     }
 }

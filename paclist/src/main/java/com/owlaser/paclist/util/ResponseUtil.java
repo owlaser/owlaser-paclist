@@ -55,6 +55,13 @@ public class ResponseUtil {
         return ok(data);
     }
 
+    public static Object okListAndVersion(List list, Object version){
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("list", list);
+        data.put("version", version);
+        return ok(data);
+    }
+
 
     public static Object fail() {
         Map<String, Object> obj = new HashMap<String, Object>();

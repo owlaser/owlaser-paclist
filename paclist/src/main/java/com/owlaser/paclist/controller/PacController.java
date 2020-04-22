@@ -1,8 +1,5 @@
 package com.owlaser.paclist.controller;
-import com.owlaser.paclist.entity.CheckMessage;
-import com.owlaser.paclist.entity.ChildNode;
-import com.owlaser.paclist.entity.Dependency;
-import com.owlaser.paclist.entity.Sum_dependency_license;
+import com.owlaser.paclist.entity.*;
 import com.owlaser.paclist.entity.Sum_dependency_license;
 import com.owlaser.paclist.service.DependencyTreeService;
 import com.owlaser.paclist.service.LicenseService;
@@ -35,11 +32,6 @@ public class PacController {
     @Autowired
     private  LicenseService licenseService;
 
-    @GetMapping(value = "/")
-    public String show() {
-        return "upload";
-    }
-
     @ResponseBody
     @PostMapping(value = "/upload")
     public Object upload(@RequestParam("file") MultipartFile file) {
@@ -69,40 +61,9 @@ public class PacController {
             e.printStackTrace();
         }
         Sum_dependency_license sum_dependency_license = new Sum_dependency_license(dependenciesList,licenseService.getConflic(dependenciesList));
-        return sum_dependency_license;
-        //return ResponseUtil.okList(dependenciesList);
+
+        return ResponseUtil.ok(sum_dependency_license);
     }
-
-
-
-//    ArrayList<Dependency> dependenciesList = new ArrayList<>();
-//
-//    /**
-//     * license冲突检测
-//     */
-//    @ResponseBody
-//    @PostMapping(value = "/licensecheck")
-//    public CheckMessage licensecheck(@RequestParam("file") MultipartFile file){
-//        CheckMessage checkMessage = new CheckMessage();
-//        ArrayList<String> licenseAllList= new ArrayList<>();
-//        for(Dependency dependency:dependenciesList){
-//               String[] sqlit = dependency.getLicense().split("  ");
-//               for(int i=0; i<sqlit.length;i++) {
-//                   if (licenseAllList.contains(sqlit[i])) {
-//                       continue;
-//                   } else {
-//                       licenseAllList.add(sqlit[i]);
-//                   }
-//                   System.out.println(sqlit[i]);
-//               }
-//        }
-//        System.out.println(licenseAllList);
-//        System.out.println(dependenciesList);
-//
-//       licenseService.licensecheck(licenseAllList,checkMessage);
-//
-//        return checkMessage;
-//    }
 
     /**
      * 查询依赖信息接口
@@ -114,4 +75,23 @@ public class PacController {
         return ResponseUtil.okList(childNodes);
     }
 
+    /**
+     * 漏洞查询接口
+     */
+    @ResponseBody
+    @GetMapping(value = "/security")
+    public Object getSecurityAdvise(String groupId, String artifactId, String version){
+        String name = groupId + ":" + artifactId;
+        List<SecurityAdvise> securityAdvises = pacService.getSecurityAdvise(name);
+        return ResponseUtil.okListAndVersion(securityAdvises, version);
+    }
+
+    /**
+     * 运行测试
+     */
+    @ResponseBody
+    @GetMapping(value = "/test")
+    public Object runTest(){
+        return "运行成功！";
+    }
 }

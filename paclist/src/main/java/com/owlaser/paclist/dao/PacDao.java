@@ -2,6 +2,7 @@ package com.owlaser.paclist.dao;
 
 import com.owlaser.paclist.entity.ChildNode;
 import com.owlaser.paclist.entity.Dependency;
+import com.owlaser.paclist.entity.SecurityAdvise;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -34,4 +35,18 @@ public interface PacDao {
     //得到包数据的所有依赖包信息元祖
     @Select("SELECT * FROM maven_childNodes WHERE parent_artifactid = #{artifact_id} AND parent_groupid = #{group_id}")
     public List<ChildNode> getParentDependencies(@Param("artifact_id")String artifact_id, @Param("group_id")String group_id);
+
+    //查找数据库是否有此包的漏洞信息
+    @Select("SELECT DISTINCT name FROM security_vulnerabilities WHERE name = #{name} AND vulnerableVersionRange = #{vulnerableVersionRange}")
+    public String getSecurityName(@Param("name")String name, @Param("vulnerableVersionRange")String vulnerableVersionRange);
+
+    @Insert("INSERT INTO security_vulnerabilities(name, ecosystem, severity, GHSA_id, GHSA_url, CVE_id, CVE_url, vulnerableVersionRange, firstPatchedVersion) " +
+            "VALUE(#{name}, #{ecosystem}, #{severity}, #{GHSA_id}, #{GHSA_url}, #{CVE_id}, #{CVE_url}, #{vulnerableVersionRange}, #{firstPatchedVersion})")
+    public void insertSecurity(@Param("name")String name, @Param("ecosystem")String ecosystem, @Param("severity")String severity,
+                               @Param("GHSA_id")String GHSA_id, @Param("GHSA_url")String GHSA_url, @Param("CVE_id")String CVE_id,
+                               @Param("CVE_url")String CVE_url, @Param("vulnerableVersionRange")String vulnerableVersionRange,
+                               @Param("firstPatchedVersion")String firstPatchedVersion);
+
+    @Select("SELECT * FROM security_vulnerabilities WHERE name = #{name}")
+    public List<SecurityAdvise> getSecurityMessage(@Param("name")String name);
 }
