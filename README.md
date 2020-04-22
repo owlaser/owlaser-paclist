@@ -25,11 +25,15 @@ OWLASER 是开源组件健康扫描系统的后端部分，项目要点如下：
 
 
 
+
+
 ## Demo
 
 [OWLASER](http://jveuzt.coding-pages.com)
 
 建议在本机部署进行扫描
+
+
 
 
 
@@ -51,11 +55,15 @@ OWLASER 是开源组件健康扫描系统的后端部分，项目要点如下：
 
 
 
+
+
 ## 文档
 
 [api](api.md)
 
 [前端文档](https://github.com/owlaser/owlaser-ui/blob/master/README.md)
+
+
 
 
 
@@ -101,7 +109,9 @@ OWLASER 是开源组件健康扫描系统的后端部分，项目要点如下：
 
    ![屏幕快照 2020-04-22 下午9.42.18](./img/1.png)
 
-   4. 更新漏洞数据库(选做)
+   
+
+4. 更新漏洞数据库(选做)
 
    将`//@Component`的注释去掉，重新跑一次PaclistApplication.java（注意要更改为自己的github token）
 
@@ -109,7 +119,7 @@ OWLASER 是开源组件健康扫描系统的后端部分，项目要点如下：
 
    <img src="./img/2.png" style="zoom:40%;" />
 
-   5. 运行前端，具体请看[前端文档](https://github.com/owlaser/owlaser-ui/blob/master/README.md)
+5. 运行前端，具体请看[前端文档](https://github.com/owlaser/owlaser-ui/blob/master/README.md)
 
    
 
