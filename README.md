@@ -53,9 +53,9 @@ OWLASER 是开源组件健康扫描系统的后端部分，项目要点如下：
 
 ## 文档
 
-api
+[api](api.md)
 
-前端文档
+[前端文档](https://github.com/owlaser/owlaser-ui/blob/master/README.md)
 
 
 
@@ -99,7 +99,7 @@ api
 
    如果返回如下界面，则后端运行成功
 
-   ![屏幕快照 2020-04-22 下午9.42.18](/Users/huangjiawei/Desktop/屏幕快照 2020-04-22 下午9.42.18.png)
+   ![屏幕快照 2020-04-22 下午9.42.18](./img/1.png)
 
    4. 更新漏洞数据库(选做)
 
@@ -107,13 +107,19 @@ api
 
    若看到以下结果，则更新完成
 
-   <img src="/Users/huangjiawei/Library/Application Support/typora-user-images/image-20200422214628281.png" alt="image-20200422214628281" style="zoom:40%;" />
+   <img src="./img/2.png" style="zoom:40%;" />
+
+   5. 运行前端，具体请看[前端文档](https://github.com/owlaser/owlaser-ui/blob/master/README.md)
 
    
 
 ## 项目展示
 
+![首页](https://cdn.jsdelivr.net/gh/tyrone-wu/PicRepo/o-home.png)
 
+![扫描结果](https://cdn.jsdelivr.net/gh/tyrone-wu/PicRepo/o-result.png)
+
+![漏洞信息](https://cdn.jsdelivr.net/gh/tyrone-wu/PicRepo/o-secur.png)
 
 
 

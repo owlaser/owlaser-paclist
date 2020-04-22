@@ -38,7 +38,7 @@ public class SecurityDatabase implements CommandLineRunner{
 
 
         //更改为自己的token
-        httpHeaders.put("Authorization","token 6a09e3396e8eacd1ac0f8b10c2e3062dba2c2644");
+        httpHeaders.put("Authorization","token XXXXXX");
         httpHeaders.put("User-Agent", "Mozilla/5.0");
         httpHeaders.put("Content-Type", "application/graphql");
         //设置http请求的头
