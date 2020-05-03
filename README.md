@@ -25,15 +25,11 @@ OWLASER 是开源组件健康扫描系统的后端部分，项目要点如下：
 
 
 
-
-
 ## Demo
 
 [OWLASER](http://jveuzt.coding-pages.com)
 
 建议在本机部署进行扫描
-
-
 
 
 
@@ -55,8 +51,6 @@ OWLASER 是开源组件健康扫描系统的后端部分，项目要点如下：
 
 
 
-
-
 ## 文档
 
 [api](api.md)
@@ -65,21 +59,19 @@ OWLASER 是开源组件健康扫描系统的后端部分，项目要点如下：
 
 
 
-
-
 ## 快速开始
 
 1. 配置最小开发环境：
 
-  * [MySQL](https://dev.mysql.com/downloads/mysql/)
-  * [JDK1.8或以上](http://www.oracle.com/technetwork/java/javase/overview/index.html)
-  * [Maven](https://maven.apache.org/download.cgi)
-  * [IDEA](https://www.jetbrains.com/idea/)
+   * [MySQL](https://dev.mysql.com/downloads/mysql/)
+   * [JDK1.8或以上](http://www.oracle.com/technetwork/java/javase/overview/index.html)
+   * [Maven](https://maven.apache.org/download.cgi)
+   * [IDEA](https://www.jetbrains.com/idea/)
 
 2. 数据库依次导入owlaser-db/sql下的数据库文件
 
-  * owlaser-scheme.sql
-  * owlaser-tables.sql
+   * owlaser-scheme.sql
+   * owlaser-tables.sql
   
 3. 启动owlaser后端服务
 
@@ -107,7 +99,7 @@ OWLASER 是开源组件健康扫描系统的后端部分，项目要点如下：
 
    如果返回如下界面，则后端运行成功
 
-   ![屏幕快照 2020-04-22 下午9.42.18](./img/1.png)
+   ![](./img/1.png)
 
    
 

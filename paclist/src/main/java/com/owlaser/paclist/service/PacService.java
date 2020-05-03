@@ -47,7 +47,7 @@ public class PacService {
         request.setGoals(Collections.singletonList("dependency:tree -D outputFile=dependency_tree -D outputType=text"));
         Invoker invoker = new DefaultInvoker();
         // 指定本机的MAVEN_HOME地址，参考invoker.setMavenHome(new File(System.getenv("MAVEN_HOME")));
-        invoker.setMavenHome(new File("/usr/share/maven"));
+        invoker.setMavenHome(new File(System.getenv("MAVEN_HOME")));
         try {
             invoker.execute(request);
         } catch (MavenInvocationException e) {
